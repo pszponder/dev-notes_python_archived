@@ -237,6 +237,26 @@ subset8 = lst[::-1] # [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 subset9 = lst[99:2]  # []
 ```
 
+## List Unpacking
+
+You can unpack sequences (such as lists or tuples) into variables using a similar syntax to JavaScript's array unpacking.
+
+```python
+x, y, z = [4, 5, 6]
+print(x)  # Outputs: 4
+print(y)  # Outputs: 5
+print(z)  # Outputs: 6
+```
+
+You can also use the `*` syntax to capture multiple items.
+
+```python
+first, *middle, last = [1, 2, 3, 4, 5]
+print(first)   # Outputs: 1
+print(middle)  # Outputs: [2, 3, 4]
+print(last)    # Outputs: 5
+```
+
 ## List Comprehensions
 
 List comprehensions are a concise and readable way to create lists in Python. They are often used to transform one list (or any iterable) into another list by applying an expression to each element in the sequence or by filtering elements based on some condition.
@@ -294,3 +314,8 @@ The basic syntax for a list comprehension is:
    labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
    print(labels)  # Outputs: ['even', 'odd', 'even', 'odd', 'even']
    ```
+
+## Resources / References
+
+- [RealPython - Python's list Data Type: A Deep Dive w/ Examples](https://realpython.com/python-list/)
+- [RealPython - Lists and Tuples in Python](https://realpython.com/python-lists-tuples/)
