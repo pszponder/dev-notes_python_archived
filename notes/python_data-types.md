@@ -39,7 +39,7 @@ fruits = ["apple", "banana", "cherry"]
 
 ## Tuples
 
-`Tuples` are ordered collections of items, which can be of any type but are _immutable_.
+[`Tuples`](python_data-types_tuples.md) are ordered collections of items, which can be of any type but are _immutable_.
 
 ```python
 coordinates = (4.0, 5.0)
@@ -47,7 +47,7 @@ coordinates = (4.0, 5.0)
 
 ## Sets
 
-`Sets` are an _unordered_ collection of _unique_ items
+[`Sets`](python_data-types_sets.md) are an _unordered_ collection of _unique_ items
 
 ```python
 # Any duplicate numbers passed into the set are removed
@@ -58,7 +58,7 @@ print(unique_numbers)  # {1, 2, 3}
 
 ## Dictionaries
 
-`Dictionaries` are _unordered_ collections of key-value pairs
+[`Dictionaries`](python_data-types_dictionaries.md) are _unordered_ collections of key-value pairs
 
 ```python
 person = {"name": "John", "age": 30}
