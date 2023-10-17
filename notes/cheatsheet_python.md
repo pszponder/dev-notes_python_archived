@@ -356,7 +356,7 @@ print(myMap)  # { "alice": 90, "bob": 70 }
 myMap = { i: 2*i for i in range(3) }
 print(myMap)  # {0: 0, 1: 2, 2: 4}
 
-# Looping through maps
+# Looping through dictionary
 myMap = { "alice": 90, "bob": 70 }
 for key in myMap:
     print(key, myMap[key])
