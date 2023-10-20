@@ -1,6 +1,6 @@
 # Python Dictionaries
 
-A `dictionary` in Python is an unordered collection of key-value pairs.
+A `dictionary` in Python is an ordered collection of key-value pairs.
 
 ## Defining a Dictionary
 
@@ -8,12 +8,23 @@ A `dictionary` in Python is an unordered collection of key-value pairs.
 - A colon `:` separates each key from its associated value
 - Key-value pairs are separated by commas `,`
 - A dictionary's key can be one of the following types:
-  - `int`
+  - `integer`
   - `float`
-  - `boolean`
   - `string`
+  - `boolean`
   - `tuple`
   - `frozenset`
+
+```python
+d = {
+    <key>: <value>,
+    <key>: <value>,
+      .
+      .
+      .
+    <key>: <value>
+}
+```
 
 ```python
 character = {
@@ -21,9 +32,33 @@ character = {
     "race": "Human",
     "class": "Ranger",
     "level": 5
+    "inventory": ["sword", "potion"]
 }
+```
 
-print(character)  # Outputs: {'name': 'Aragorn', 'race': 'Human', 'class': 'Ranger', 'level': 5}
+You can also construct a dictionary with the built-in `dict()` function.
+
+The argument to `dict()` should be a sequence of key-value pairs. A list of tuples works well for this:
+
+```txt
+d = dict([
+    (<key>, <value>),
+    (<key>, <value),
+      .
+      .
+      .
+    (<key>, <value>)
+])
+```
+
+```python
+character = dict([
+    ("name", "Aragorn"),
+    ("race", "Human"),
+    ("class", "Ranger"),
+    ("level", 5),
+    ("inventory", ["sword", "potion"])
+])
 ```
 
 ## Accessing Dictionary Values
@@ -72,6 +107,15 @@ character["background"] = "Isildur's Heir"
 
 # Update value of existing key-value pair
 character["level"] = 6
+```
+
+Can also use the `update()` method to add or update properties of a dictionary with values passed into the `update()` method.
+
+- The `update()` method accepts a dictionary whose key-value pairs are used to update the dictionary invoked by the `update()` method.
+
+```python
+# Add a new "spells" property & update the "level" property
+character.update({"spells": ["inspire", "rally"], "level": 6})
 ```
 
 ## Removing Key-Value Pairs
@@ -128,16 +172,44 @@ print(t2)  # ('b', 20)
 print(d)  # ('a', 10)
 ```
 
-## Checking if a Key Exists
+## Checking if a Key or Value Exists
+
+### Checking if a Key Exists
+
+Use `in` and `not in` keywords to check if a key exists (or not)
 
 ```python
+if <key> in <dictionary>.keys():
+    # Do something if the key exists
+
+# You can actually omit the `keys()` method
 if <key> in <dictionary>:
     # Do something if the key exists
 ```
 
 ```python
+if "weapon" in character.keys():
+    print("Weapon is equipped!")
+
 if "weapon" in character:
     print("Weapon is equipped!")
+
+if "birthday" not in character:
+    print("You don't have a birthday!")
+```
+
+### Checking if a Value Exists
+
+Use `in` and `not in` keywords to check if a value exists (or not)
+
+```python
+if <key> in <dictionary>.values():
+    # Do something if the value exists
+```
+
+```python
+if "sword" in character.values():
+    print("I have a sword!")
 ```
 
 ## Iterate over Keys & Values of a Dictionary
@@ -173,49 +245,7 @@ print(my_dictionary)  # {}
 
 ## Dictionary Comprehensions
 
-Dictionary comprehension is a concise way to create dictionaries using a single line of Python code.
-
-```python
-my_dict = {key_expr: value_expr for item in iterable}
-```
-
-```python
-# Create a dictionary where keys are numbers between 1 and 5
-# values are squares of their respective keys
-squared = {x: x**2 for x in range(1, 6)}
-
-print(squared)  # Outputs: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
-```
-
-```python
-# Conditional Dictionary Comprehension
-# Create a dictionary with numbers between 1 and 5 as keys
-# but only if the number is even
-squared_even = {x: x**2 for x in range(1, 6) if x % 2 == 0}
-
-print(squared_even)  # Outputs: {2: 4, 4: 16}
-```
-
-```python
-# Using Two Iterables
-# Use the zip() function to iterate over two iterables in parallel
-# Enabling you to create a dictionary from two separate lists
-characters = ["Frodo", "Gandalf", "Legolas"]
-roles = ["Hobbit", "Wizard", "Elf"]
-
-character_roles = {character: role for character, role in zip(characters, roles)}
-
-print(character_roles)  # Outputs: {'Frodo': 'Hobbit', 'Gandalf': 'Wizard', 'Legolas': 'Elf'}
-```
-
-```python
-# Nested Dictionary Comprehension
-# Can also nest dictionary comprehensions
-matrix = {(i, j): i*j for i in range(3) for j in range(3)}
-
-print(matrix)
-# Outputs: {(0, 0): 0, (0, 1): 0, (0, 2): 0, (1, 0): 0, (1, 1): 1, (1, 2): 2, (2, 0): 0, (2, 1): 2, (2, 2): 4}
-```
+[Dictionary Comprehensions](python_comprehensions.md#dictionary-comprehensions)
 
 ## Merging Dictionaries
 
@@ -258,6 +288,17 @@ merged_dict = dict1 | dict2
 print(merged_dict)  # Outputs: {'a': 1, 'b': 3, 'c': 4}
 ```
 
+Can also merge the dictionaries in place by using the update operator (`|=`)
+
+```python
+dict_d = {'a': 1, 'b': 2}
+
+# Merge the RHS dictionary into the LHS dictionary
+dict_d |= {'c': 3, 'd': 4}
+
+print(dict_d) # {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+```
+
 ## Nested Dictionaries
 
 ```python
@@ -271,4 +312,6 @@ print(party["Mage"]["name"])  # Outputs: 'Gandalf'
 
 ## Resources / References
 
+- [Python Cheatsheet - Dictionaries](https://www.pythoncheatsheet.org/cheatsheet/dictionaries)
 - [RealPython - Dictionaries in Python](https://realpython.com/python-dicts/)
+- [Real Python - How to Iterate Through a Dictionary in Python](https://realpython.com/iterate-through-dictionary-python/#using-some-of-pythons-built-in-functions)

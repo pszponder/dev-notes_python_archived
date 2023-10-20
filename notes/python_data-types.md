@@ -1,5 +1,21 @@
 # Python Data Types
 
+Python supports the following Data Types:
+
+- Strings
+- Integers
+- Booleans
+- Floats
+- Bytes
+- Dictionary
+- List
+- Tuple
+- Set
+- Complex
+- Frozenset
+- Range
+- Binary
+
 ## Numbers
 
 ```python
@@ -14,7 +30,7 @@ y1 = 0
 y2 = 3.14
 ```
 
-## Strings
+## [Strings](python_data-types_strings.md)
 
 ```python
 # Can use either single or double quotes when creating strings
@@ -29,7 +45,7 @@ is_true = True
 is_false = False
 ```
 
-## Lists
+## [Lists](python_data-types_lists.md)
 
 [`Lists`](python_data-types_lists.md) are an ordered collection of items which can be of any type and are _mutable_.
 
@@ -37,7 +53,7 @@ is_false = False
 fruits = ["apple", "banana", "cherry"]
 ```
 
-## Tuples
+## [Tuples](python_data-types_tuples.md)
 
 [`Tuples`](python_data-types_tuples.md) are ordered collections of items, which can be of any type but are _immutable_.
 
@@ -45,7 +61,7 @@ fruits = ["apple", "banana", "cherry"]
 coordinates = (4.0, 5.0)
 ```
 
-## Sets
+## [Sets](python_data-types_sets.md)
 
 [`Sets`](python_data-types_sets.md) are an _unordered_ collection of _unique_ items
 
@@ -66,10 +82,16 @@ person = {"name": "John", "age": 30}
 
 ## None
 
-`None` represents the absence of a value or a null value
+`None` represents the lack / absence of a value. Think of this as the equivalent to `null` in other languages like JavaScript.
+
+`None` is often used when initializing a variable which will have its value changed in later in the code.
 
 ```python
-x = None
+# Initialize the user variable with a value of None
+user = None
+
+# Update the value of user
+user = "bob"
 ```
 
 ## Mutable vs Immutable Types
@@ -85,9 +107,10 @@ x = None
 
 `Immutable` types in Python are types which after being created, cannot be modified.
 
-- `int`
-- `float`
+- Numbers (`int`, `float`, `binary`)
+- Booleans
 - `str`
+- Bytes
 - `tuple`
 - `frozenset`
 
@@ -117,5 +140,64 @@ print(id(lst))  # This gives the memory address of the object lst references
 
 lst.append(4)   # Modifies the original list object
 print(id(lst))  # The memory address remains the same
-
 ```
+
+## Python Iterables
+
+> [! NOTE] Python `Iterable`s
+> An `iterable` is a collection which can be iterated over in a loop
+>
+> In Python, iterable types are:
+>
+> - `string`
+> - `list`
+> - `tuple`
+> - `dictionary`
+> - `set`
+
+## Type Casting / Type Conversion
+
+We can use type casting in Python to convert a value from one type to another
+
+```python
+# Convert string "12" into an integer
+int("12") # 12
+
+# Convert string "3.3" into a float
+float("3.3") # 3.3
+
+# Convert float into string
+str(44.5) # "44.5"
+
+# Convert number into a boolean
+bool(0) # False
+bool(1) # True
+
+# Convert a binary to an integer
+int("0b101", 2) # 5
+
+# Convert an integer to binary using the bin() function
+bin_val = bin(5) # "0b101"
+
+# Convert a list into a tuple
+tup = tuple(['cat', 'dog', 5]) # ('cat', 'dog', 5)
+
+# Convert a tuple into a list
+li1 = list(('cat', 'dog', 5)) # ['cat', 'dog', 5]
+
+# Convert the characters of a string to a list
+li2 = list('hello') # ['h', 'e', 'l', 'l', 'o']
+
+# Convert a list into a set
+s2 = set([1, 2, 3]) # {1, 2, 3}
+
+# convert a tuple into a set
+s3 = set((1, 2, 3)) # {1, 2, 3}
+
+# convert a string into a set
+s4 = set("hello") # {'e', 'l', 'o', 'h'}
+```
+
+## References
+
+- [Real Python - Python's Mutable vs Immutable Types: What's the Difference?](https://realpython.com/python-mutable-vs-immutable-types/#:~:text=types%20in%20Python.-,Mutability%20vs%20Immutability,its%20internal%20state%20after%20creation.)
