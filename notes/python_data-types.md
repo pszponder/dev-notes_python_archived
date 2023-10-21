@@ -16,7 +16,7 @@ Python supports the following Data Types:
 - Range
 - Binary
 
-## Numbers
+## [Numbers](python_data-types_numbers.md)
 
 ```python
 # Integers
