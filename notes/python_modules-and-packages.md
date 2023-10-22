@@ -346,7 +346,7 @@ Python's `requirements.txt` is analogous to `package.json` in JavaScript
 - Use `pip freeze` to generate the list of packages and store in a `requirements.txt` file.
 
 ```bash
-pip3 freeze > requirements.txt
+pip freeze > requirements.txt
 ```
 
 You will need to re-run this command whenever you add or remove a package
@@ -354,7 +354,7 @@ You will need to re-run this command whenever you add or remove a package
 Use the following command to install all dependencies from `requirements.txt` file
 
 ```bash
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Virtual Environments
