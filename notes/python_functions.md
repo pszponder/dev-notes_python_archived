@@ -28,6 +28,52 @@ def greet(name):
 greet("Alice")  # Outputs: Hello, Alice!
 ```
 
+### Assigning Functions to Variables
+
+```python
+def greet():
+    print("Hello World!")
+
+# Assign the "hello" variable to point to the greet function
+hello = greet
+
+hello() # "Hello World!"
+```
+
+```python
+# Define a few lambda functions
+avg = lambda nums: sum(nums) / len(nums)
+total = lambda nums: sum(nums)
+top = lambda nums: max(nums)
+
+# This dictionary contains a mapping between a key and function
+operations = {
+    "average": avg,
+    "total": total,
+    "top": top
+}
+
+students = [
+    {"name": "Bilbo", "grades": (98, 100, 95, 85)},
+    {"name": "Sam", "grades": (67, 90, 82, 92)},
+    {"name": "Frodo", "grades": (55, 88, 70, 56)},
+]
+
+for student in students:
+    name = student["name"]
+    grades = student["grades"]
+
+    print(f"Student: {name}")
+    operation = input("Enter 'average', 'total', or 'top': ")
+
+    # Select the correct function to apply and invoke it
+    try:
+        operation_function = operations[operation]
+        print(operation_function(grades))
+    except:
+        print("Error")
+```
+
 ### Default Parameter Values
 
 Can provide default values to function parameters

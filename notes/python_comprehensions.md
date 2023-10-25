@@ -31,7 +31,7 @@ Every list comprehension in Python includes three elements:
 3. **`iterable`** is a list, [set](https://realpython.com/python-sets/), sequence, [generator](https://realpython.com/introduction-to-python-generators/), or any other object that can return its elements one at a time.
 
 ```python
-# Use list comprehension to turn string into a list of charachters
+# Use list comprehension to turn string into a list of characters
 chars = [char for char in 'hello']
 print(chars) # ['h', 'e', 'l', 'l', 'o']
 

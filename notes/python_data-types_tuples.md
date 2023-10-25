@@ -3,11 +3,11 @@
 Tuples are identical to [lists](python_data-types_lists.md) in all respects, except for the following properties:
 
 - Tuples are defined by enclosing the elements in parentheses (`()`) instead of square brackets (`[]`).
-- Tuples are immutable.
+- Tuples are immutable (you cannot add or remove elements from a tuple once it is defined)
 
 ## Defining a Tuple
 
-A `tuple` is defined using parenthesis `()` instead of square brackets
+A `tuple` is defined as a comma-separated list of values (optionally) wrapped in a set of parenthesis.
 
 **NOTE:** Accessing and Slicing Tuples
 
@@ -33,7 +33,7 @@ print(t[1::2]) # ('bar', 'qux', 'corge')
 my_tuple = (1, 2, 3, 4, 5)
 
 # You can perform any operation on a tuple that does not change the data
-print(my_typle[0])   # 1
+print(my_tuple[0])   # 1
 print(5 in my_tuple) # true
 
 # Create a new tuple which is a slice of the original
@@ -43,7 +43,7 @@ print(new_tuple) # (2, )
 new_tuple2 = my_tuple[1:4]
 print(new_tuple2) # (2, 3, 4)
 
-# Assign mulitple variables based on value (and position) in tuple
+# Assign multiple variables based on value (and position) in tuple
 # Note, if other contains 2 or more values, it will be a list
 x, y, z, *other = (1, 2, 3, 4, 5)
 
@@ -84,6 +84,13 @@ print(s4) # 'qux'
 
 ```python
 a, b, c = (1, 2, 3)
+print(a)  # Outputs: 1
+print(b)  # Outputs: 2
+print(c)  # Outputs: 3
+
+# OR (Don't need "()" when working with tuples)
+
+a, b, c = 1, 2, 3
 print(a)  # Outputs: 1
 print(b)  # Outputs: 2
 print(c)  # Outputs: 3

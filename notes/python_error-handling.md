@@ -47,6 +47,17 @@ except (TypeError, ValueError) as e:
     print(f"Caught an error: {e}")
 ```
 
+You can also have multiple except blocks
+
+```python
+try:
+    # some code...
+except(TypeError) as e:
+    print(f"Caught a Type Error: {e}")
+except(ValueError) as e:
+    print(f"Caught a Value Error: {e}")
+```
+
 If you want to catch all exceptions (not recommended generally, unless you have a good reason):
 
 ```python
@@ -111,7 +122,7 @@ while True:
         # which isn't handled by the above 2 except blocks
         print('handled generic error')
     else:
-        # This block runs if logic in try block executes 
+        # This block runs if logic in try block executes
         #  without any errors being thrown
         print('thank you!')
         break
@@ -136,7 +147,7 @@ print(sum(1, '2'))
 
 ## Catching Multiple Error / Exception Types at the Same Time
 
-You can also specify an `except:` block to handle multiple types of errors / exceptions. 
+You can also specify an `except:` block to handle multiple types of errors / exceptions.
 
 Simply pass in a comma-separated list of errors / exceptions and wrap in parenthesis after `except`
 
@@ -146,7 +157,7 @@ Simply pass in a comma-separated list of errors / exceptions and wrap in parenth
 def divide(num1, num2):
     try:
         return num1 / num2
-    # This except block triggers if either 
+    # This except block triggers if either
     # TypeError or ZeroDivisionError trigger in the try block
     except (TypeError, ZeroDivisionError) as err:
         print(err)
@@ -171,9 +182,51 @@ if x < 0:
     raise ValueError("Negative values are not allowed!")
 ```
 
+```python
+# When invoking this function, it will raise the NotImplementedError
+# This reminds us to update the function logic
+def my_func():
+    raise NotImplementedError("Update function logic")
+```
+
+### Bubbling Up / Re-Raising Exceptions
+
+If you wish to bubble up an exception, simply use the `raise` keyword inside an `except` block
+
+Re-raising exceptions is useful in scenarios where you want to log the exception, perform some cleanup operations, or add additional context before letting the exception propagate further up
+
+```python
+"""
+1. The "risky_operation" function tries to convert a string to an int
+which raises a ValueError
+1. The exception is caught by the except block inside "risky_operation".
+After printing a message, it re-raises the exception using the "raise" keyword
+1. The re-raised exception is then caught by the "except" block
+inside the "main" function
+"""
+
+def risky_operation():
+    try:
+        # some code that might raise an exception
+        x = int("not_a_number")
+    except ValueError:
+        print("A value error occurred in risky_operation!")
+        raise  # re-raises the caught exception
+
+def main():
+    try:
+        risky_operation()
+    except ValueError:
+        print("A value error was caught in main!")
+
+main()
+# A value error occurred in risky_operation!
+# A value error was caught in main!
+```
+
 ## Creating Custom Exceptions
 
-You can define your own exception types by creating new classes derived from the base class `Exception` or any derived exception class.
+You can define your own exception types by creating new classes [derived](python_oop.md#inheritance) from the base class `Exception` or any derived exception class.
 
 ```python
 class CustomError(Exception):
@@ -182,9 +235,87 @@ class CustomError(Exception):
 raise CustomError("This is a custom error.")
 ```
 
+```python
+# Notice that the custom error can inherit from any built-in exception class
+class CustomError(TypeError):
+    pass
+
+raise CustomError("This is a custom TypeError")
+```
+
+```python
+class CustomRequestError(TypeError):
+    """
+    Exception raised when a specific error code is needed
+    """
+    def __init__(self, message, code):
+        super().__init__(f"Error Code {code}: {message}")
+        self.code = code
+
+err = raise CustomRequestError("This is a custom TypeError", 500)
+print(err.__doc__) # Prints the doc-string
+```
+
+```python
+"""
+1. Define a custom exception InsufficientManaError to indicate
+when a spell fails due to a lack of mana.
+
+2. The Wizard class has a method cast_spell that attempts to cast a spell.
+If there's not enough mana, it raises the InsufficientManaError exception.
+
+3. Within the cast_spell method, we catch this exception to print a user-friendly
+message but then re-raise it to indicate a failure.
+
+4. In the main function, we try to cast two spells.
+The first one succeeds, but the second fails.
+The re-raised exception is caught in main,
+and we print another message indicating the interruption.
+"""
+
+class InsufficientManaError(Exception):
+    """Exception raised for errors in the input."""
+    def __init__(self, mana_required, mana_available):
+        self.mana_required = mana_required
+        self.mana_available = mana_available
+        self.message = f"Insufficient mana! Required {mana_required}, but only {mana_available} available."
+        super().__init__(self.message)
+
+
+class Wizard:
+    def __init__(self, name, mana):
+        self.name = name
+        self.mana = mana
+
+    def cast_spell(self, spell, mana_required):
+        try:
+            if self.mana < mana_required:
+                raise InsufficientManaError(mana_required, self.mana)
+            self.mana -= mana_required
+            print(f"{self.name} successfully cast {spell}!")
+        except InsufficientManaError as e:
+            print(f"{self.name} tried to cast {spell}, but {e.message}")
+            raise  # re-raises the caught exception
+
+
+def main():
+    gandalf = Wizard("Gandalf", 50)
+
+    try:
+        gandalf.cast_spell("Light", 10)  # This should succeed
+        gandalf.cast_spell("Teleport", 100)  # This should fail
+    except InsufficientManaError:
+        print("Spell casting was interrupted due to an error!")
+
+main()
+# Gandalf successfully cast Light!
+# Gandalf tried to cast Teleport, but Insufficient mana! Required 100, but only 40 available.
+# Spell casting was interrupted due to an error!
+```
+
 ## Scope in try / except
 
-The scope of the variables declared within the `try` block are considered global scope. (Only functions have local scope in Python). 
+The scope of the variables declared within the `try` block are considered global scope. (Only functions have local scope in Python).
 
 ```python
 # Extract Arguments from the CL
@@ -205,3 +336,6 @@ print(DEST_DIR)
 - [Python Docs - Built-in Exceptions](https://docs.python.org/3/library/exceptions.html)
 - [Real Python - Python's raise: Effectively Raising Exceptions in Your Code](https://realpython.com/python-raise-exception/)
 - [Real Python - Exceptions](https://realpython.com/python-exceptions/)
+- [Ask forgiveness not permission - explained](https://stackoverflow.com/questions/12265451/ask-forgiveness-not-permission-explain)
+- [Is it a good practice to use try-except-else in Python](https://stackoverflow.com/questions/16138232/is-it-a-good-practice-to-use-try-except-else-in-python/16138864#16138864)
+- [Jeff Knupp - Write Cleaner Python: Use Exceptions](https://web.archive.org/web/20160313053014/http://jeffknupp.com/blog/2013/02/06/write-cleaner-python-use-exceptions/)

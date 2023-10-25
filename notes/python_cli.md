@@ -1,4 +1,4 @@
-# Python Command Line Arguments
+# Python Command Line
 
 A [**command-line interface (CLI)**](https://en.wikipedia.org/wiki/Command-line_interface) provides a way for a user to interact with a program running in a text-based [shell](https://en.wikipedia.org/wiki/Shell_%28computing%29) interpreter.
 
@@ -12,6 +12,23 @@ A command line interface can be characterized by the following elements:
 - Zero or more command line **arguments**
 - An **output** representing the result of the command
 - Textual documentation referred to as **usage** or **help**
+
+## Obtaining User Input from from the CLI
+
+Use the `input()` function to read input from the CLI
+
+- **CAUTION:** `input()` returns the user input into a string.
+- User must hit the `ENTER` key after submitting their input into the `input()` method
+
+```python
+# Ask for user input
+age = input("How old are you?")
+
+# Convert string return into a number
+age_num = int(age)
+
+print(f"You are {age_num * 365} days old!")
+```
 
 ## Reading CLI Arguments w/ sys.argv
 

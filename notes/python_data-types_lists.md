@@ -11,6 +11,8 @@ Characteristics of Python Lists:
 - Lists are mutable
 - Lists are dynamic
 
+**NOTE:** If you don't plan to modify your list (add or remove elements), it is better to use a [tuple](python_data-types_tuples.md) instead
+
 ```python
 a = ["foo", "bar", "baz", "qux"]
 
@@ -79,6 +81,17 @@ value3 = matrix[0][2]  # 3
 value4 = matrix[1][0]  # 4
 value5 = matrix[1][1]  # 5
 value6 = matrix[1][2]  # 6
+```
+
+## Iterate Over Elements in a List
+
+[Iterating over Lists](python_loops.md#iterate-over-iterables-lists-tuples-strings-etc)
+
+```python
+fruits = ["apple", "banana", "cherry"]
+
+for fruit in fruits:
+    print(fruit)
 ```
 
 ## List Slices
@@ -745,7 +758,7 @@ print(li) # [1, 2, 3, 4]
 ```python
 # Take the values inside the array and join them together
 # via the string which is invoking join (empty space in this ex.)
-new_sentence = " ".join(['hi', 'my', 'name', 'is', 'JOJO'])
+new_sentence = " ".join(['hi', 'my', 'name', 'is', 'Bilbo'])
 
 print(new_sentence) # 'hi my name is JOJO'
 ```

@@ -185,7 +185,7 @@ class Dragon:
 
 **Instance methods** are functions that are defined inside a class and can only be called from an instance of that class.
 
-- Just like `.__init__()`, an instance method’s first parameter is always `self`.
+- **NOTE:** Just like `.__init__()`, an instance method’s first parameter is always `self`.
 
 ```python
 # Define the Dragon Class
@@ -210,58 +210,7 @@ class Dragon:
 
 ### Class & Static Methods
 
-Both `class methods` and `attribute methods` are methods which belong to the class instead of the method.
-
-Declaring a `Class Method`
-
-1. Add the `@classmethod` decorator above the method definition
-2. Pass in `cls` instead of `self` as the first parameter of the method
-
-Declaring `Static Method`
-
-1. Add the `@staticmethod` decorator above the method definition
-2. **_Don't_** add `self` or `cls` as the first parameter of the method
-
-Both `class method` and `static methods` can be invoked directly from the Class definition itself instead of needing to invoke it from the instance.
-
-`Class Methods` vs `Static Methods`
-
-- `Class Methods` have access to `cls` which allows them to reference a class or instance state (attributes / methods).
-- `Static Methods` do not have access to `cls`
-
-```python
-class Dragon:
-    has_magic = True
-    species = "Drago familiaris"
-
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
-    # Define a class method
-    # Note the convention of passing in "cls" instead of "self"
-    @classmethod
-    def eat(cls, sound):
-        return f"{sound}, {sound}, {sound}"
-
-    # Define a static method
-    # don't have access to "cls" in this case
-    @staticmethod
-    def fight():
-        return "preparing to fight..."
-
-
-# Instantiate two methods
-dragon1 = Dragon("Alduin", 10000)
-dragon2 = Dragon("Smaug", 1000)
-
-# Invoke the eat method on the class instances
-print(dragon1.eat("Nom"))  # Nom, Nom, Nom
-print(dragon2.eat("Crunch"))  # Crunch, Crunch, Crunch
-
-# Since eat is a class method, we can call it directly from the class
-print(Dragon.eat("Munch"))  # Munch, Munch, Munch
-```
+[`@classmethod` & `@staticmethod`](python_oop.md#creating-class-methods-and-static-methods)
 
 ### Public, Protected, and Private Access Modifiers
 
@@ -476,6 +425,43 @@ You can overwrite the `dunder methods` of a custom python class in order to impl
 
 [List of Python Dunder Methods](https://docs.python.org/3/reference/datamodel.html#special-method-names)
 
+```python
+class Bookshelf:
+    def __init__(self):
+        self.bookshelf = []
+
+    # Dunder method to enable calling len on class
+    def __len__(self):
+        return len(self.bookshelf)
+
+    # Dunder method to enable accessing index on class
+    def __getitem__(self, i):
+        return self.bookshelf[i]
+
+    # Define how instance of class
+    # should be represented in a string form
+    def __repr__(self):
+        return f"Bookshelf w/ {len(self)} books."
+
+    # Return a readable string representation of this object
+    def __str__(self):
+        return f"Bookshelf w/ {len(self)} books."
+
+# Instantiate the class
+bookshelf = Bookshelf()
+
+# Populate the bookshelf
+bookshelf.bookshelf.append("Lord of the Rings")
+bookshelf.bookshelf.append("The Hobbit")
+
+print(bookshelf) # Bookshelf w/ 2 books
+
+# Now that we enabled __getitem__ dunder method,
+# we can iterate over the items in the class
+for book in bookshelf:
+    print(book)
+```
+
 ### Constructor method with `__init__()`
 
 [[python_oop#Defining a class constructor using `__init__()`|__init__()]]
@@ -620,14 +606,12 @@ cat.speak()   # output: Meow!
 
 #### Inheriting w/ `super()`
 
-At a high level `super()` gives you access to methods in a superclass (parent class) from the child / subclass that inherits from it.
+`super()` gives you access to methods in a superclass (parent class) from the child / subclass that inherits from it.
 
 What does `super()` do?
 
 - `super()` alone returns a temporary object of the superclass that then allows you to call that superclass’s methods.
-
-**CAUTION:** Don't pass `self` into methods invoked on `super()`
-
+- **CAUTION:** Don't pass `self` into methods invoked on `super()`
 - When using `super()`, any method that is invoked on `super()` should not have the `self` keyword passed into it, this is already handled by `super()` under the hood.
 
 Using the `super()` method to access parent attributes
@@ -694,6 +678,7 @@ Using `super()` to access parent methods
 
 - You can use the `super()` method to gain access to parent methods.
 - Just call `super().<parent_method>(param1, param2, ...)` to invoke a parent method in the child class
+- **CAUTION:** Don't pass `self` into methods invoked on `super()`
 
 ```python
 # Grandparent class
@@ -929,9 +914,189 @@ for shape in shapes:
     print(shape.area())
 ```
 
+## Class Decorators
+
+### Invoke a method as a property w/ @property
+
+The `@property` decorator in Python allows you to define methods in a class that are intended to be accessed like attributes, without needing to call them like a method.
+
+- **CAUTION:** This only works if the class' method does not accept any arguments (other than `self`)
+
+```python
+class Hobbit:
+    def __init__(self, name):
+        self.name = name
+        self.meals_eaten = 0
+
+    @property
+    def had_second_breakfast(self):
+        if self.meals_eaten >= 2:
+            return True
+        return False
+
+    def eat(self):
+        self.meals_eaten += 1
+        print(f"{self.name} has eaten!")
+
+"""
+Example Usage:
+
+Notice that we invoke had_second_breakfast as we would a property
+even though it is a method
+"""
+frodo = Hobbit("Frodo")
+frodo.eat()  # Frodo has eaten!
+print(frodo.had_second_breakfast)  # Outputs: False
+
+frodo.eat()  # Frodo has eaten!
+print(frodo.had_second_breakfast)  # Outputs: True
+```
+
+When should I use `@property`?
+
+1. **Computed Attributes**: When an attribute's value is derived from other attributes and needs to be computed rather than just retrieved. For example, if you have a `Rectangle` class with `width` and `height` attributes, you might use `@property` for an `area` attribute that computes the area.
+
+2. **Encapsulation and Validation**: If you want to ensure that an attribute meets certain conditions before being set or to modify its behavior when accessed. This can be combined with a setter.
+
+3. **Lazy Computation**: When the computation of an attribute's value is expensive, and you want to defer this computation until the attribute is actually accessed. You might also want to cache the computed value for subsequent accesses.
+
+4. **API Design**: When designing classes that other developers will use, you might want the API to be more intuitive. Using `@property`, you can present methods as attributes, making the API easier to understand and use.
+
+5. **Backward Compatibility**: If you initially designed a class with an attribute and later want to change the attribute to a method (for computation, validation, etc.), you can use `@property` to ensure that existing code that accesses the attribute (without parentheses) continues to work.
+
+6. **Read-only Attributes**: If you want an attribute to be read-only and not settable from outside the class (though you can still use `@property_name.setter` to allow controlled external setting if desired).
+
+However, there are also times when you should avoid or reconsider using `@property`:
+
+1. **Overuse**: Overusing properties can make code harder to read since it blurs the line between method calls and attribute access. It's important to use it judiciously.
+
+2. **Expectation of Cheap Operations**: Attribute access is typically expected to be a cheap operation. If accessing a property runs a very expensive computation, it can be misleading and might cause performance issues.
+
+3. **Complex Logic**: If the logic inside a property becomes too complex, it might be better to use a method instead to make it clear that a computation or operation is happening.
+
+4. **Mutable Objects**: If a property returns a mutable object, users of the class might accidentally modify it, causing unexpected behavior. In such cases, consider returning a copy of the object or using another approach.
+
+### Creating Class Methods and Static Methods
+
+Both `class methods` and `attribute methods` are methods which belong to the class instead of the method.
+
+Declaring a `Class Method`
+
+1. Add the `@classmethod` decorator above the method definition
+2. Pass in `cls` instead of `self` as the first parameter of the method
+
+Declaring `Static Method`
+
+1. Add the `@staticmethod` decorator above the method definition
+2. **_Don't_** add `self` or `cls` as the first parameter of the method
+
+Both `class method` and `static methods` can be invoked directly from the Class definition itself instead of needing to invoke it from the instance.
+
+`@classmethod`:
+
+- Used to define a method within a class that takes the class itself as its first argument (conventionally named `cls`).
+- Can use the class and its properties within the class method.
+- This decorator can be called on the class itself, rather than an instance of the class.
+
+`@staticmethod`:
+
+- This decorator is used to define a method that doesn't take a special first argument (neither `self` nor `cls`).
+- It behaves like a regular function but belongs to the class's namespace.
+- It can't modify the class state or the instance state.
+- It's used when you want to perform an action that's related to the class, but not one that requires or modifies the class or its instances.
+
+`Class Methods` vs `Static Methods`
+
+- `Class Methods` have access to `cls` which allows them to reference a class or instance state (attributes / methods).
+- `Static Methods` do not have access to `cls`
+- Use `@classmethod` when you need to have access to class variables or other class methods, or when you want to provide alternative initializers for your class.
+- Use `@staticmethod` when you're writing utility functions that make sense to be part of the class's namespace, but which don't need access to the class or its instances.
+
+Here's an example using the theme of a `Book` class:
+
+```python
+class Book:
+    num_books = 0  # Class variable to track the number of books created
+
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+        Book.num_books += 1
+
+    @classmethod
+    def total_books(cls):
+        return cls.num_books
+
+    @staticmethod
+    def is_valid_title(title):
+        """Check if a book title is valid (just a simple example check)"""
+        return bool(title) and len(title) < 100
+
+# Usage:
+
+# Using @classmethod
+print(Book.total_books())  # Outputs: 0
+
+book1 = Book("The Fellowship of the Ring", "J.R.R. Tolkien")
+book2 = Book("The Two Towers", "J.R.R. Tolkien")
+
+print(Book.total_books())  # Outputs: 2
+
+# Using @staticmethod
+print(Book.is_valid_title("The Return of the King"))  # Outputs: True
+print(Book.is_valid_title(""))                         # Outputs: False
+```
+
+In the example above:
+
+- The `total_books` class method accesses a class variable `num_books` to return the total number of book instances created. We use `@classmethod` here because we're interacting with class state.
+
+- The `is_valid_title` static method checks if a given title is valid (just a basic check for illustrative purposes). We use `@staticmethod` since it doesn't interact with either class or instance states; it just performs a function relevant to books.
+
+```python
+class Dragon:
+    has_magic = True
+    species = "Drago familiaris"
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    # Define a class method
+    # Note the convention of passing in "cls" instead of "self"
+    @classmethod
+    def eat(cls, sound):
+        return f"{sound}, {sound}, {sound}"
+
+    # Define a static method
+    # don't have access to "cls" in this case
+    @staticmethod
+    def fight():
+        return "preparing to fight..."
+
+
+# Instantiate two methods
+dragon1 = Dragon("Alduin", 10000)
+dragon2 = Dragon("Smaug", 1000)
+
+# Invoke the eat method on the class instances
+print(dragon1.eat("Nom"))  # Nom, Nom, Nom
+print(dragon2.eat("Crunch"))  # Crunch, Crunch, Crunch
+
+# Since eat is a class method, we can call it directly from the class
+print(Dragon.eat("Munch"))  # Munch, Munch, Munch
+```
+
+## OOP Tips
+
+1. Make classes either behavior-oriented or data-oriented
+2. Be careful with inheritance
+3. Use Dependency Injection
+
 ## References
 
 - [Real Python - OOP in Python3](https://realpython.com/python3-object-oriented-programming/)
 - [Python Cheat Sheet - OOP Basics](https://www.pythoncheatsheet.org/cheatsheet/oop-basics)
 - [Real Python - Supercharge your Classes with Python super()](https://realpython.com/python-super/)
 - [List of Python Dunder Methods](https://docs.python.org/3/reference/datamodel.html#special-method-names)
+- [ArjanCodes - 5 Tips for Object-Oriented Programming Done Well - In Python](https://www.youtube.com/watch?v=-ghD-XjjO2g)

@@ -44,7 +44,18 @@ full_name = first_name + " " + last_name # john doe
 
 - Python3 introduced `f-strings` which are much better and easier to use than string concatenation
 
-## Formatted Strings (f-strings)
+## Formatting Strings
+
+### Converting a Value to a String
+
+Use the `str()` function to convert a non-string value to a string
+
+```python
+age = 40
+age_as_str = str(age)
+```
+
+### Formatted Strings (f-strings)
 
 [Real Python: f-string guide](https://realpython.com/python-f-strings/)
 
@@ -81,6 +92,16 @@ contains some math in it:
 '''
 
 print(f_string)
+```
+
+### The format() method
+
+Use the `format()` method to replace a set of curly braces in a string with a value(s)
+
+```python
+age = 123
+age_string = "You are {} years old".format(number)
+print(number_string) # You are 123 years old
 ```
 
 ## String Multiplication

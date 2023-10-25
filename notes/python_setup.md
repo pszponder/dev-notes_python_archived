@@ -39,7 +39,7 @@ Always setup a [virtual environment](python_virtual-environments.md) when creati
 
 ## Project Entry Point
 
-A typical Python project will have a `main.py` file which will serve as the project entry point.
+A typical Python project will have a `main.py` (or `app.py`) file which will serve as the project entry point.
 
 In conjunction with this, the `main.py` file will typically have an special if statement to execute code only if the `main.py` is actually executed.
 

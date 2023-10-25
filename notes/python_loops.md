@@ -12,7 +12,7 @@ The `for` loop can be used to iterate over any iterable type (`string`, `list`, 
 
 ```python
 # Print each character in the string
-for item in 'Zero to Mastery':
+for item in 'Hello World':
     print(item)
 
 # Print each element in the list
@@ -26,6 +26,13 @@ for item in (1, 2, 3, 4, 5):
 # Print each item in the set
 for item in {1, 2, 3, 4, 5}:
     print(item)
+```
+
+You can use `_` for the value of an iterable if you don't intend to use it
+
+```python
+for _ in [1, 2, 3, 4, 5]:
+    print("Hello")
 ```
 
 ### Using the range() function to create iterables
@@ -294,6 +301,23 @@ for fruit in fruits:
     print(fruit)
 ```
 
+### Destructuring elements in a for loop
+
+```python
+list_of_tuples = [
+    ("a", 1),
+    ("b", 2),
+    ("c", 3)
+]
+
+for letter, num in list_of_tuples:
+    print(f"{letter} => {num}")
+
+# a => 1
+# b => 2
+# c => 3
+```
+
 ## Iterate over Dictionaries
 
 [Real Python - How to iterate through a dictionary in python](https://realpython.com/iterate-through-dictionary-python/)
@@ -441,6 +465,10 @@ scores = [85, 90, 78]
 
 for name, score in zip(names, scores):
     print(name, score)
+
+# Alice 85
+# Bob 90
+# Charlie 78
 ```
 
 ## Creating and Using Custom Iterators

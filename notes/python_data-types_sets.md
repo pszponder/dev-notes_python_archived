@@ -413,7 +413,7 @@ s.clear()
 print(s) # set()
 ```
 
-## Set Operations
+## Set Comparison Operations
 
 ### set union() and |
 
