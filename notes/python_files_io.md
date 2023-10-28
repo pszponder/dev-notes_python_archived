@@ -2,9 +2,211 @@
 
 Python has several built-in modules and functions for handling files. These functions are spread out over several modules such as `os`, `os.path`, `shutil`, and `pathlib`, to name a few.
 
-## Reading Files w/ open & close function
+## Opening and Closing Files
 
-**CAUTION:** It is recommended to use [`with open(...) as ...:`](python_files_io.md#read--write--edit-with-the-with-open-as--pattern) pattern instead of above
+### open() and close() functions
+
+> It is recommended to use [`with open(...) as ... :`](python_files_io.md#with-open-as) pattern instead of above
+
+> **ALWAYS** close a file (via `close(<file_object>)`) after file operations are complete!
+
+Use the `open()` function to open up a file in Python
+
+- Returns a file object which can be used to read, write, or append to the file
+
+```python
+open(filename, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)
+```
+
+Let's break down the parameters:
+
+1. **filename**: The name of the file you want to open.
+2. **mode**: Specifies the mode in which the file should be opened. The common modes are:
+
+   - `'r'`: Read mode (default). Open the file for reading.
+   - `'w'`: Write mode. Open the file for writing (creates a new file or truncates an existing file).
+   - `'a'`: Append mode. Open the file for writing (creates a new file or appends to an existing file).
+   - `'b'`: Binary mode. Read or write the file in binary format, e.g., `'rb'` or `'wb'`.
+   - `'x'`: Exclusive creation mode. Opens the file for exclusive creation, failing if the file already exists.
+   - `'t'`: Text mode (default). This is used in combination with other modes, like `'rt'`.
+
+   Modes can be combined. For instance, `'rb'` means read in binary mode.
+
+3. **buffering**: Optional. If set to 0, no buffering will take place. If set to 1, line buffering will be performed while accessing the file. If set to a number > 1, buffering will happen with the indicated buffer size. If negative (default), the system default is used.
+4. **encoding**: Optional. The name of the encoding used to decode or encode the file. E.g., `'utf-8'`, `'latin-1'`, etc. If not specified, the default system encoding is used.
+5. **errors**: Optional. Specifies the action to take upon decoding error. Common values are `'strict'`, `'ignore'`, and `'replace'`.
+6. **newline**: Optional. Controls how universal newlines mode works. Can be `None`, `''`, `'\n'`, `'\r'`, or `'\r\n'`.
+7. **closefd**: If set to `False` and a file descriptor rather than a filename was given, the underlying file descriptor will be kept open when the file is closed. This parameter is irrelevant if a filename is given.
+8. **opener**: Optional. A custom opener can be used by passing an `opener` function. The underlying file descriptor for the file object is then obtained by calling the opener with `(filename, flags)`.
+
+```python
+# =======================
+# Open a file for reading
+# =======================
+f = open('filename.txt', 'r')
+```
+
+```python
+# =======================
+# Open a file for writing
+# =======================
+f = open('filename.txt', 'w')
+```
+
+```python
+# ==============================
+# Open a binary file for reading
+# ==============================
+f = open('filename.bin', 'rb')
+```
+
+```python
+# ==================================
+# Open a file with a custom encoding
+# ==================================
+f = open('filename.txt', 'r', encoding='utf-8')
+```
+
+**IMPORTANT:** After performing operations on the file, it's important to close it using the `close()` method:
+
+```python
+# =====================
+# Closing a file object
+# =====================
+f.close()
+```
+
+However, it's a best practice to use the [`with`](python_files_io.md#with-open-as) statement when working with files
+
+### with open(...) as ... :
+
+Using the `with` statement alongside the `open()` function is a best practice in Python for file handling.
+
+- Ensures that the file is properly and safely handled, even if exceptions occur within the `with` block.
+- This pattern is called a _context manager_.
+
+Benefits of using `with open()...`:
+
+1. **Automatic File Closing**: The file is automatically closed when the `with` block is exited, even if the block is exited due to an error. This ensures that resources are freed up and reduces the risk of file corruption.
+
+2. **Exception Handling**: If an exception occurs within the `with` block, the file is still safely closed, ensuring that the code is more robust and less prone to leaving files open unintentionally.
+
+3. **Readability**: The use of the `with` statement clearly delineates the scope where the file is being accessed, making it easier to understand the context of file operations.
+
+```python
+# ==============
+# Reading a file
+# ==============
+with open('filename.txt', 'r') as file:
+    content = file.read()
+    # process content or perform other operations
+# file is automatically closed here
+```
+
+```python
+# =================
+# Writing to a file
+# =================
+with open('filename.txt', 'w') as file:
+    file.write("Hello, World!")
+# file is automatically closed here
+```
+
+You can open multiple files in the same `with` block:
+
+```python
+# =======================
+# Handling multiple files
+# =======================
+with open('input.txt', 'r') as infile, open('output.txt', 'w') as outfile:
+    data = infile.read()
+    # maybe process or transform data
+    outfile.write(data)
+# both infile and outfile are automatically closed here
+```
+
+Files are iterable, meaning you can loop through each line in a file:
+
+```python
+# ========================
+# Iterating through a file
+# ========================
+with open('filename.txt', 'r') as file:
+    for line in file:
+        print(line.strip())  # strip() removes the newline character at the end
+```
+
+## Reading Files
+
+### Iterating through the File Object
+
+The file object returned by the `open()` function is iterable
+
+- Use it to iterate through each line of the file
+
+```python
+with open('filename.txt', 'r') as file:
+    for line in file:
+        print(line.strip())  # strip() removes newline characters and trailing/leading whitespaces
+```
+
+### Reading Methods
+
+There are several methods which can be used to read data from a file object
+
+- `read()` => Reads entire file content and returns it as a single string
+- `readline()` => Reads the next line from the file. Invoking the method again will read the subsequent line.
+- `readlines()` => Reads entire file content and returns a list of line strings
+
+```txt
+Line 1
+Line 2
+Line 3
+```
+
+```python
+# ===================================
+# Read entire file contents w/ read()
+# ===================================
+with open('filename.txt', 'r') as f:
+    content = f.read()
+    print(content)  # 'Line 1\nLine 2\nLine 3\n'
+```
+
+```python
+# ===================================
+# Read individual lines w/ readline()
+# ===================================
+with open('filename.txt', 'r') as f:
+    line1 = f.readline()
+    line2 = f.readline()
+    line3 = f.readline()
+    print(line1, end='')  # Line 1
+    print(line2, end='')  # Line 2
+    print(line3, end='')  # Line 3
+```
+
+```python
+# =============
+# f.readlines()
+# =============
+with open('filename.txt', 'r') as f:
+    lines = f.readlines()
+    print(lines)  # ['Line 1\n', 'Line 2\n', 'Line 3\n']
+```
+
+```python
+# ========================
+# Iterating w/ readlines()
+# ========================
+with open('filename.txt', 'r') as f:
+    lines = f.readlines()
+
+    for line in lines:
+        print(line.strip())  # strip() removes newline characters and trailing/leading whitespaces
+```
+
+### Example of Reading Files w/ open()
 
 ```python
 # Create a file object from the passed in file
@@ -45,13 +247,7 @@ print(lines)  # ['hello world\n', 'how\n', 'are you?']
 my_file.close()
 ```
 
-## Read / Write / Edit with the "with open(...) as ...:" pattern
-
-Reading and writing data to files using Python is pretty straightforward.
-
-To do this, you must first open files in the appropriate mode. `open()` takes a filename and a mode as its arguments
-
-Use the `with open(...) as ...:` pattern to open a file as a specified file object, perform any operations and automatically close the file when complete
+### Example of reading files w/ with statement
 
 ```python
 # Create a file object (named my_file) from the passed in file
@@ -91,73 +287,144 @@ with open("hello.txt", mode="r") as my_file:
     print(lines)  # ['hello world\n', 'how\n', 'are you?']
 ```
 
-### Reading from a file
+## Changing File Position w/ seek()
 
-To open a file in `read-only` mode, pass in the `r` argument into the `open()` function
+The `seek()` method is used to change the current file position and takes two parameters:
 
-```python
-# Pass in 'r' argument to open the file in read only mode
-with open('data.txt', mode='r') as f:
-    data1 = f.read()
-    f.seek(0)
+- `offset` -> The number of bytes to move the cursor
+- `whence` -> (optional) determines from where the offset is calculated (defaults to 0)
+  - `0` (default): Offset is calculated from the beginning of the file
+  - `1`: Offset is calculated from the current file position
+  - `2`: Offset is calculated from the end of the file
 
-    data2 = f.readline()
-    f.seek(0)
+When you use `file.seek(0)`, you are moving the file's current cursor position back to the beginning of the file.
 
-    data3 = f.readlies()
-```
-
-### Writing to a file
-
-To open a file in `write` mode, pass in the `w` argument into the `open()` function
+- Useful when you've read a file to the end and want to read it again from the start
 
 ```python
-# Write data to the specified file
-with open('data.txt', mode='w') as f:
-    data = 'some data to be written to the file'
-    f.write(data)
+with open('filename.txt', 'r') as file:
+    content1 = file.read()
+    file.seek(0)  # Move cursor back to the start of the file.
+    content2 = file.read()
+
+# content1 and content2 will have the same content in this case.
 ```
 
-**CAUTION:** Consecutive writes overwrite current file contents
+## Writing to Files
 
-### Read & Write to a file
+To write to a file, use the `open()` function with the `w` mode to open the file, then use the `write(<file_object>)` method to write to the file object
 
-To open a file in `read + write` mode, pass in the `r+` argument into the `open()` function
+**CAUTION:** Using `w` mode will overwrite the contents of the entire file.
+
+- If you want to append to the file, use `a` mode instead
 
 ```python
-# Read and write the specified file
-with open('data.txt', mode='r+') as f:
-    # Read from file
-    print(f.read())
-    print(f.read())
-
-    # Write to the file
-    data = 'some data to be written to the file'
-    f.write(data)
-
-    # Re-read the file
-    f.seek(0)
-    print(f.read())
+# =========================================
+# Write to (and overwrite contents of) file
+# =========================================
+with open('filename.txt', 'w') as file:
+    file.write('Hello, World!')  # Existing file contents are overwritten
 ```
-
-**CAUTION:** Consecutive writes overwrite current file contents
-
-### Append to the end of the file
-
-Use the `a` mode to allow file appending. Consecutive writes add to the file instead of overwriting it
 
 ```python
-# Appen data to the specified file in append mode
-with open('data.txt', mode='a') as f:
-    data = 'some data to be written to the file'
-    f.write(data)
+# =========================
+# Append contents to a file
+# =========================
+with open('filename.txt', 'a') as file:
+    file.write('\nAppended text.')
 ```
 
-## File Paths
+## Read / Write JSON Data
 
-The `pathlib` python core library module can be used to work with file paths
+Python has a built-in module called `json` that lets you encode and decode JSOn data
 
-[Object-Oriented filesystem paths - pathlib](https://docs.python.org/3/library/pathlib.html)
+```python
+# ===========================
+# Writing Data to a JSON file
+# ===========================
+import json
+
+data = {'name': 'John', 'age': 30, 'city': 'New York'}
+with open('data.json', 'w') as file:
+    json.dump(data, file)
+```
+
+```python
+# ====================
+# Reading in JSON data
+# ====================
+import json
+
+with open('data.json', 'r') as file:
+    data = json.load(file) # reads file and turns it into a dictionary
+    print(data)
+```
+
+## Read / Write CSV Data
+
+Python's `csv` module helps in reading from and writing to CSV files
+
+- [Teclado - CSV Files w/ Python - Reading and Writing](https://www.youtube.com/watch?v=W7QByFjVom8)
+- [Real Python - Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)
+
+```python
+# =========================
+# Writing data to CSV files
+# =========================
+import csv
+
+rows = [['Name', 'Age'], ['Alice', 28], ['Bob', 24]]
+
+with open('data.csv', 'w') as file:
+    writer = csv.writer(file)
+    writer.writerows(rows)
+```
+
+```python
+# ===========================
+# Reading data from CSV files
+# ===========================
+import csv
+
+with open('data.csv', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        print(row)
+```
+
+## Read / Write Binary Files
+
+Use the `rb` or `wb` modes with `open()` to work with binary data
+
+```python
+# ============================
+# Writing data to binary files
+# ============================
+with open('data.bin', 'wb') as file:
+    file.write(b'Binary data here')
+```
+
+```python
+# ==============================
+# Reading data from binary files
+# ==============================
+with open('data.bin', 'rb') as file:
+    data = file.read()
+print(data)
+```
+
+## Handling Exceptions when Working w/ Files
+
+When dealing with file operations, it's crucial to handle exceptions that may occur, like `FileNotFoundError`. Use [`try-except`](python_error-handling.md#try--except--else--finally) blocks for handling these types of errors.
+
+```python
+try:
+    with open('non_existent_file.txt', 'r') as file:
+        content = file.read()
+    print(content)
+except FileNotFoundError:
+    print("The file does not exist.")
+```
 
 ## File IO Errors
 
@@ -182,3 +449,5 @@ except IOError as err:
 - [Dan Bader - Working with File I/O in Python](https://dbader.org/blog/python-file-io)
 - [Object-Oriented filesystem paths - pathlib](https://docs.python.org/3/library/pathlib.html)
 - [Why you should be using pathlib instead of os.path](https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/)
+- [Teclado - CSV Files w/ Python - Reading and Writing](https://www.youtube.com/watch?v=W7QByFjVom8)
+- [Real Python - Reading and Writing CSV Files in Python](https://realpython.com/python-csv/)

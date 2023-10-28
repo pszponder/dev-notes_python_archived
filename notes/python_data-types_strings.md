@@ -284,6 +284,57 @@ quote.replace("be", "replace") # "to replace or not to replace"
 
 [Join values in a list together into a string](python_data-types_lists.md#join-values-in-a-list-together-into-a-string)
 
+### Split strings by a delimiter
+
+Use the `split()` method to split a string by a delimiter, and return the split strings in a [list](python_data-types_lists.md)
+
+- Default delimiter is a space
+
+```python
+# =======================================================
+# Split a string using the default delimiter (whitespace)
+# =======================================================
+text = "Hello World"
+result = text.split()
+print(result)  # ['Hello', 'World']
+```
+
+```python
+# =======================================
+# Split a string using a custom delimiter
+# =======================================
+text = "apple,banana,cherry"
+result = text.split(',')
+print(result)  # ['apple', 'banana', 'cherry']
+```
+
+```python
+# ==========================
+# Limit the number of splits
+# ==========================
+text = "apple banana cherry date"
+result = text.split(' ', maxsplit=2)
+print(result)  # ['apple', 'banana', 'cherry date']
+```
+
+```python
+# ================================
+# Using multi-character delimiters
+# ================================
+text = "apple::banana::cherry"
+result = text.split('::')
+print(result)  # ['apple', 'banana', 'cherry']
+```
+
+```python
+# ========================
+# Splitting at line breaks
+# ========================
+text = "apple\nbanana\ncherry"
+result = text.splitlines()
+print(result)  # ['apple', 'banana', 'cherry']
+```
+
 ### Additional Common String Methods
 
 - `join()`
