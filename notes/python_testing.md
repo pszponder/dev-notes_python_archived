@@ -6,6 +6,24 @@
 
 Python has a built-in library called `unittest` that can be used to write and run unit tests
 
+### Setting Up a Unit Test
+
+```python
+import unittest
+
+
+# name the class after the python module you are testing
+class Test<file_name>(unittest.TestCase):
+    # Tests should start with `test_`
+    def test_<test_func_name>():
+        pass
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+Example
+
 ```python
 # main.py
 
@@ -27,7 +45,8 @@ import main  # Import the Python module we are testing
 
 
 # Create a test class
-# This class inherits from the unittest.TestCase class class TestMain(unittest.TestCase):
+# This class inherits from the unittest.TestCase
+class class TestMain(unittest.TestCase):
     # Special setup method
     # runs before each test is executed
     def setUp(self) -> None:

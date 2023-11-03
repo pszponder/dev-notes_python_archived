@@ -234,6 +234,18 @@ for key, val in my_dict.items():
     print(key, val)
 ```
 
+### Unpack Dictionary Values
+
+```python
+character = {"name": "Frodo", "age": 50, "home": "Shire"}
+
+name, age, home = character.values()
+
+print(name)  # "Frodo"
+print(age)   # 50
+print(home)  # "Shire"
+```
+
 ## Empty / Clear Data in a Dictionary
 
 Use the `clear()` method to clear the contents of a dictionary

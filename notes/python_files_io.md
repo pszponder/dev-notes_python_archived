@@ -334,6 +334,127 @@ with open('filename.txt', 'a') as file:
     file.write('\nAppended text.')
 ```
 
+## Read / Write Data to .txt Files
+
+```python
+FILE_NAME = "lotr_characters.txt"
+
+def create_character(name, race, role):
+    """
+    Create a new character in the TXT file.
+
+    Args:
+    - name (str): Name of the character.
+    - race (str): Race of the character.
+    - role (str): Role of the character in the story.
+    """
+    with open(FILE_NAME, 'a') as file:
+        file.write(f"{name},{race},{role}\n")
+
+def read_characters():
+    """
+    Read and display all the characters from the TXT file.
+    """
+    try:
+        with open(FILE_NAME, 'r') as file:
+            for line in file:
+                print(line.strip())
+    except FileNotFoundError:
+        print("No characters found.")
+
+def update_character(name, new_name, new_race, new_role):
+    """
+    Update the details of an existing character.
+
+    Args:
+    - name (str): Name of the character to update.
+    - new_name (str): New name for the character.
+    - new_race (str): New race for the character.
+    - new_role (str): New role for the character.
+    """
+    characters = []
+    found = False
+
+    try:
+        with open(FILE_NAME, 'r') as file:
+            for line in file:
+                char_name, char_race, char_role = line.strip().split(',')
+                if char_name == name:
+                    characters.append(f"{new_name or char_name},{new_race or char_race},{new_role or char_role}")
+                    found = True
+                else:
+                    characters.append(line.strip())
+
+        if not found:
+            print(f"Character with name {name} not found.")
+            return
+
+        with open(FILE_NAME, 'w') as file:
+            for char in characters:
+                file.write(f"{char}\n")
+
+    except FileNotFoundError:
+        print(f"Character with name {name} not found.")
+
+def delete_character(name):
+    """
+    Delete a character from the TXT based on the name.
+
+    Args:
+    - name (str): Name of the character to delete.
+    """
+    characters = []
+    found = False
+
+    try:
+        with open(FILE_NAME, 'r') as file:
+            for line in file:
+                char_name = line.strip().split(',')[0]
+                if char_name != name:
+                    characters.append(line.strip())
+                else:
+                    found = True
+
+        if not found:
+            print(f"Character with name {name} not found.")
+            return
+
+        with open(FILE_NAME, 'w') as file:
+            for char in characters:
+                file.write(f"{char}\n")
+
+    except FileNotFoundError:
+        print(f"Character with name {name} not found.")
+
+if __name__ == "__main__":
+    # Main loop for user interactions.
+    while True:
+        choice = input("Choose an operation (C: Create, R: Read, U: Update, D: Delete, Q: Quit): ").upper()
+
+        if choice == "C":
+            name = input("Enter character name: ")
+            race = input("Enter character race: ")
+            role = input("Enter character role: ")
+            create_character(name, race, role)
+
+        elif choice == "R":
+            read_characters()
+
+        elif choice == "U":
+            name = input("Enter character name to update: ")
+            new_name = input("Enter new name or leave blank to keep the same: ")
+            new_race = input("Enter new race or leave blank to keep the same: ")
+            new_role = input("Enter new role or leave blank to keep the same: ")
+            update_character(name, new_name or name, new_race or race, new_role or role)
+
+        elif choice == "D":
+            name = input("Enter character name to delete: ")
+            delete_character(name)
+
+        elif choice == "Q":
+            break
+```
+
 ## Read / Write JSON Data
 
 Python has a built-in module called `json` that lets you encode and decode JSOn data
@@ -358,6 +479,120 @@ import json
 with open('data.json', 'r') as file:
     data = json.load(file) # reads file and turns it into a dictionary
     print(data)
+```
+
+```python
+import json
+
+FILE_NAME = "lotr_characters.json"
+
+def create_character(name, race, role):
+    """
+    Create a new character in the JSON file.
+
+    Args:
+    - name (str): Name of the character.
+    - race (str): Race of the character.
+    - role (str): Role of the character in the story.
+    """
+    characters = []
+    try:
+        with open(FILE_NAME, 'r') as file:
+            characters = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+
+    characters.append({
+        "name": name,
+        "race": race,
+        "role": role
+    })
+
+    with open(FILE_NAME, 'w') as file:
+        json.dump(characters, file)
+
+def read_characters():
+    """
+    Read and display all the characters from the JSON file.
+    """
+    try:
+        with open(FILE_NAME, 'r') as file:
+            characters = json.load(file)
+            for char in characters:
+                print(char)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No characters found.")
+
+def update_character(name, new_name, new_race, new_role):
+    """
+    Update the details of an existing character.
+
+    Args:
+    - name (str): Name of the character to update.
+    - new_name (str): New name for the character.
+    - new_race (str): New race for the character.
+    - new_role (str): New role for the character.
+    """
+    try:
+        with open(FILE_NAME, 'r') as file:
+            characters = json.load(file)
+
+        for char in characters:
+            if char['name'] == name:
+                char['name'] = new_name or char['name']
+                char['race'] = new_race or char['race']
+                char['role'] = new_role or char['role']
+
+        with open(FILE_NAME, 'w') as file:
+            json.dump(characters, file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"Character with name {name} not found.")
+
+def delete_character(name):
+    """
+    Delete a character from the JSON based on the name.
+
+    Args:
+    - name (str): Name of the character to delete.
+    """
+    try:
+        with open(FILE_NAME, 'r') as file:
+            characters = json.load(file)
+
+        characters = [char for char in characters if char['name'] != name]
+
+        with open(FILE_NAME, 'w') as file:
+            json.dump(characters, file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"Character with name {name} not found.")
+
+if __name__ == "__main__":
+    # Main loop for user interactions.
+    while True:
+        choice = input("Choose an operation (C: Create, R: Read, U: Update, D: Delete, Q: Quit): ").upper()
+
+        if choice == "C":
+            name = input("Enter character name: ")
+            race = input("Enter character race: ")
+            role = input("Enter character role: ")
+            create_character(name, race, role)
+
+        elif choice == "R":
+            read_characters()
+
+        elif choice == "U":
+            name = input("Enter character name to update: ")
+            new_name = input("Enter new name or leave blank to keep the same: ")
+            new_race = input("Enter new race or leave blank to keep the same: ")
+            new_role = input("Enter new role or leave blank to keep the same: ")
+            update_character(name, new_name or name, new_race or race, new_role or role)
+
+        elif choice == "D":
+            name = input("Enter character name to delete: ")
+            delete_character(name)
+
+        elif choice == "Q":
+            break
 ```
 
 ## Read / Write CSV Data
@@ -390,6 +625,104 @@ with open('data.csv', 'r') as file:
     reader = csv.reader(file)
     for row in reader:
         print(row)
+```
+
+```python
+import csv
+import os
+
+FILE_NAME = "lotr_characters.csv"
+
+def create_character(name, race, role):
+    """
+    Create a new character in the CSV file.
+
+    Args:
+    - name (str): Name of the character.
+    - race (str): Race of the character.
+    - role (str): Role of the character in the story.
+    """
+    with open(FILE_NAME, mode="a", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([name, race, role])
+
+def read_characters():
+    """
+    Read and display all the characters from the CSV file.
+    """
+    with open(FILE_NAME, mode="r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(row)
+
+def update_character(name, new_name, new_race, new_role):
+    """
+    Update the details of an existing character.
+
+    Args:
+    - name (str): Name of the character to update.
+    - new_name (str): New name for the character.
+    - new_race (str): New race for the character.
+    - new_role (str): New role for the character.
+    """
+    characters = []
+    with open(FILE_NAME, mode="r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == name:
+                characters.append([new_name, new_race, new_role])
+            else:
+                characters.append(row)
+
+    with open(FILE_NAME, mode="w", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(characters)
+
+def delete_character(name):
+    """
+    Delete a character from the CSV based on the name.
+
+    Args:
+    - name (str): Name of the character to delete.
+    """
+    characters = []
+    with open(FILE_NAME, mode="r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] != name:
+                characters.append(row)
+
+    with open(FILE_NAME, mode="w", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(characters)
+
+if __name__ == "__main__":
+    # Main loop for user interactions.
+    while True:
+        choice = input("Choose an operation (C: Create, R: Read, U: Update, D: Delete, Q: Quit): ").upper()
+
+        if choice == "C":
+            name = input("Enter character name: ")
+            race = input("Enter character race: ")
+            role = input("Enter character role: ")
+            create_character(name, race, role)
+
+        elif choice == "R":
+            read_characters()
+
+        elif choice == "U":
+            name = input("Enter character name to update: ")
+            new_name = input("Enter new name or leave blank to keep the same: ")
+            new_race = input("Enter new race or leave blank to keep the same: ")
+            new_role = input("Enter new role or leave blank to keep the same: ")
+            update_character(name, new_name or name, new_race or race, new_role or role)
+
+        elif choice == "D":
+            name = input("Enter character name to delete: ")
+            delete_character(name)
+
+        elif choice == "Q":
+            break
 ```
 
 ## Read / Write Binary Files

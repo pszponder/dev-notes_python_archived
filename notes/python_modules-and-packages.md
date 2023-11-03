@@ -180,3 +180,5 @@ https://pypi.org/
 - [NerualNine - Importing Your Own Python Modules Properly](https://www.youtube.com/watch?v=GxCXiSkm6no)
 - [Sanjeev Thiyagarajan - Python Packages & Modules](https://www.youtube.com/watch?v=2DRPBUiqmV4)
 - [launchcode education - Importing Our Own Modules](https://education.launchcode.org/lchs/chapters/local-dev/vscode-custom-modules.html)
+- [Stack Overflow - Python Relative Imports for the Billionth time](https://stackoverflow.com/questions/14132789/relative-imports-for-the-billionth-time/14132912#14132912)
+- [Python Docs - json](https://docs.python.org/3/library/json.html)
