@@ -1,5 +1,5 @@
 """
-Responsible for Interfacing with the DB (.txt file)
+Responsible for Interfacing with the DB (.json file)
 
 Shape of File:
 id,msg,complete
@@ -17,7 +17,7 @@ bool_mapping = {"True": True, "False": False}
 
 def create_db_if_not_exists():
     """
-    Create a new DB (txt file) if one does not exist in the directory
+    Create a new DB (csv file) if one does not exist in the directory
     :return: None
     """
     if not os.path.exists(DB_NAME):
