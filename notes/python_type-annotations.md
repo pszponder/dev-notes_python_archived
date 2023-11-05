@@ -24,7 +24,6 @@ def get_full_name(first_name: str, last_name: str) -> str:
 
 
 print(get_full_name("john", "doe"))
-
 ```
 
 ## Variables

@@ -775,6 +775,10 @@ except IOError as err:
     raise err
 ```
 
+## Sqlite
+
+You can also use [sqlite](python_sqlite.md) in Python
+
 ## References
 
 - [Real Python - Working with Files in Python](https://realpython.com/working-with-files-in-python/)

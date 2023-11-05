@@ -116,6 +116,10 @@ To run in verbose mode, add the `-v` option
 python -m unittest -v
 ```
 
+### Mocking
+
+[NeuralNine - Professional Python Testing with Mocks](https://www.youtube.com/watch?v=-F6wVOlsEAM)
+
 ### Examples
 
 ```python
@@ -182,3 +186,4 @@ if __name__ == '__main__':
 - [Python Docs - unittest](https://docs.python.org/3/library/unittest.html)
 - [Real Python - Getting Started with Testing in Python](https://realpython.com/python-testing/)
 - [Real Python - Effective Python Testing with Pytest](https://realpython.com/pytest-python-testing/)
+- [NeuralNine - Professional Python Testing with Mocks](https://www.youtube.com/watch?v=-F6wVOlsEAM)
