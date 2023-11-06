@@ -1,140 +1,146 @@
 # Python Generators
 
-- `Generators` allow us to generate a sequence of values over time
-- `Generators` allow us to use special keywords `pause` and `resume`
-- `Generators` are a subset of `iterables`
-- `Generators` are much more memory efficient than lists and other iterables.
+Generators in Python are a powerful tool for handling large amounts of data without consuming a lot of memory.
 
-The `range()` function is actually an example of a generator. It does not actually create an iterable sequence of values, instead, it returns a single incrementing value each time it is called
+A generator is a type of iterable, like a list or tuple. However, unlike lists, it does not store all its values in memory; instead, it generates them on the fly.
+
+The main advantage of generators is that they can be used to produce items one at a time and only when required, consuming less memory.
+
+Generators...
+
+- Allow us to generate a sequence of values over time
+- Allow us to use special keywords `pause` and `resume`
+- Are a subset of `iterables`
+- Are much more memory efficient than lists and other iterables.
+
+## Basic Generator Syntax
+
+To create a generator, you use a function with the `yield` keyword instead of `return`.
+
+- When the generator is executed in a `next()` function, the generator returns the value at `yield` and pauses.
+- The next time the generator is invoked, it resumes execution from the `yield` and continues its execution
+
+Let's imagine a simple generator that simulates a journey through Middle Earth, yielding names of places as Frodo and Sam go on their quest:
 
 ```python
-# Define a generator function
-def generator_func(num):
-    for i in range(num):
-       # Return i and pause function
-       #  until function is invoked again by "next()"
-        yield i
+def middle_earth_journey():
+    yield "Hobbiton"
+    yield "Bree"
+    yield "Rivendell"
+    yield "Moria"
+    yield "Lothlorien"
+    yield "Mordor"
 
-# Every time we invoke generator_func(1000) in the for loop
-# the generator_func will return a new value
-for item in generator_func(1000):
-    print(item)
+# Create the generator object
+journey = middle_earth_journey()
+
+# Using the generator
+for place in journey:
+    print(place)
 ```
 
 ```python
-# Define a generator function
-def generator_func(num):
-    for i in range(num):
-        # Return i * 2 and pause function
-        #  until function is invoked again by "next()"
-        yield i * 2
+def is_prime(num):
+    """Checks if a number is prime."""
+    if num < 2:
+        return False
+    for i in range(2, int(num ** 0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
 
-
-g = generator_func(100)
-print(g)  # <generator object generator_func at 0x7ff914f1f780>
-
-# Each time the next() method is invoked on the generator function
-#  the value that the generator function returns is incremented
-
-a = next(g)  # increment the value returned by generator_func
-print(a)  # 0 (since 0 * 2 = 0)
-
-b = next(g)  # increment the value returned by generator_func
-print(b)  # 2 (since 1 * 2 = 2)
-
-c = next(g)  # increment the value returned by generator_func
-print(c)  # 4 (since 2 * 2 = 4)
-
-d = next(g)  # increment the value returned by generator_func
-print(d)  # 6 (since 3 * 2 = 6)
-```
-
-```python
-# Define a generator function which mimics a for loop
-# This mimics how a for loop runs under the hood
-def iter_for(iterable):
-    # "iter" enables the invocation of "next()" in the passed in iterable
-    iterator = iter(iterable)
-
+def prime_generator():
+    """Generator to yield prime numbers one by one."""
+    num = 2
     while True:
-        try:
-            # Add additional logic to execute here
-            print(iterator)
-            next(iterator)
-        except StopIteration:
-            # StopIteration is thrown by a generator when end of range is reached
-            break
+        if is_prime(num):
+            yield num  # This is a prime number, so yield it
+        num += 1
 
-
-iter_for([1, 2, 3])
+# Usage
+primes = prime_generator()
+for _ in range(10):  # Get first 10 prime numbers
+    print(next(primes))
 ```
 
 ```python
-# This class, when instantiated, mimics the logic of the range generator function
-class CustomRange:
-    current = 0
+def fibonacci_generator():
+    """Generator to yield Fibonacci numbers one by one."""
+    a, b = 0, 1
+    while True:
+        yield a  # Yield the current Fibonacci number
+        a, b = b, a + b  # Calculate the next Fibonacci number
 
-    def __init__(self, first, last):
-        self.first = first
-        self.last = last
-
-    def __iter__(self):
-        return self
-
-    # Invoke this method when the next() method on the class instance is called
-    def __next__(self):
-        if CustomRange.current < self.last:
-            num = CustomRange.current
-            CustomRange.current += 1
-            return num
-        raise StopIteration
-
-
-# Instantiate the CustomRange function
-custom_range = CustomRange(0, 100)
-
-# Use the generator instance to mimic the range function
-for i in custom_range:
-    print(i)  # prints sequence of values from 0 through 99
+# Usage
+fib = fibonacci_generator()
+for _ in range(10):  # Get first 10 Fibonacci numbers
+    print(next(fib))
 ```
 
 ```python
-# Use generators to create the fibonacci sequence
-def fib(number):
-    # Devine initial values
-    a = 0
-    b = 1
+def geometric_progression(a, r):
+    """Generator to yield terms of a geometric progression."""
+    while True:
+        yield a  # Yield the current term
+        a *= r  # Calculate the next term
 
-    for i in range(number):
-        yield a  # return value of a when "next()" function is invoked
-
-        # Update values of a and b
-        temp = a
-        a = b
-        b = temp + b
-
-
-# Use the fib generator function to generate 20 values of the fibonacci sequence
-for x in fib(20):
-    print(x)
-
-
-# Use lists to generate the fibonacci sequence
-def fib2(number):
-    a = 0
-    b = 1
-    result = []
-    for i in range(number):
-        result.append(a)
-        # Update values of a and b
-        temp = a
-        a = b
-        b = temp + b
-    return result
-
-
-print(fib2(20))
+# Usage
+geo_prog = geometric_progression(1, 2)  # Start with 1 and common ratio 2
+for _ in range(10):  # Get first 10 terms
+    print(next(geo_prog))
 ```
+
+## Generator Expressions
+
+You can also create a generator using a syntax similar to [list comprehensions](python_data-types_lists.md#list-comprehensions). Here's an example to create a generator of squares for even numbers in a given range:
+
+```python
+squares = (x*x for x in range(10) if x % 2 == 0)
+
+for square in squares:
+    print(square)
+```
+
+## `send` and `throw`
+
+Generators have methods to interact with the values they produce:
+
+- `send`: Resumes the generator and sends a value that becomes the result of the current `yield` expression.
+- `throw`: Used to raise an exception inside the generator.
+
+Imagine a generator for a D&D adventure where a character encounters various creatures:
+
+```python
+def dnd_adventure():
+    encounter = yield "You enter a dark cave."
+    while encounter:
+        if encounter == "dragon":
+            yield "You face a mighty dragon!"
+        elif encounter == "goblin":
+            yield "A goblin jumps out!"
+        else:
+            yield "Unknown creature!"
+        encounter = yield None
+
+adventure = dnd_adventure()
+print(next(adventure))  # Starts the generator
+
+response = adventure.send("dragon")
+print(response)
+
+response = adventure.send("goblin")
+print(response)
+```
+
+## Why Use Generators?
+
+1. **Memory Efficiency**: Since generators produce items only one at a time, they can represent an infinite stream of data.
+2. **Lazy Evaluation**: Data is only generated when required, which can lead to performance improvements.
+
+## Generator Limitations
+
+1. Generators can only be iterated once.
+2. You cannot access elements by index, like you would in a list.
 
 ## Resources / References
 
